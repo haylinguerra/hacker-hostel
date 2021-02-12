@@ -5,16 +5,34 @@ import Error from './components/Error';
 
 
 class App extends Component {
-
+    constructor(props) {
+        super(props)
+        this.state = {
+            dateError: {},
+            mealList: {}
+        }
+        this.renderMealPlan = this.renderMealPlan.bind(this)
+    }
+    renderMealPlan(clientProps) {
+        if(clientProps.error) {
+            this.setState({
+                dateError: {error:'error', client: clientProps.hacker}})
+        }
+        else {
+            this.setState({
+                mealList: clientProps
+            })
+        }
+    }
     render() {
         return (<div className="container-fluid">
             <center>
                 <h2>Hacker Hostel</h2>
             </center>
             <div className="container">
-                <Bookings></Bookings>
-                <Error></Error>
-                <Meals></Meals>
+                <Bookings mealPlan={this.renderMealPlan}></Bookings>
+                {this.state.dateError.client && <Error {...this.state.dateError}></Error>}
+                {this.state.mealList.hacker && <Meals {...this.state.mealList}></Meals>}
             </div>
         </div>);
     }
